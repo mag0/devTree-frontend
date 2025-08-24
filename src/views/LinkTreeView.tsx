@@ -12,7 +12,8 @@ export const LinkTreeView = () => {
     const [devTreeLinks, setDevTreeLinks] = useState(social)
 
     const queryClient = useQueryClient();
-    const user: User = queryClient.getQueryData<User>(['user'])!;
+    const user: User = queryClient.getQueryData(['user'])!;
+
     const { mutate } = useMutation({
         mutationFn: updateProfile,
         onError: (error) => {
@@ -54,6 +55,7 @@ export const LinkTreeView = () => {
             }
             return link
         })
+
         setDevTreeLinks(updatesLinks)
 
         let updatedItems: SocialNetwork[] = [];
@@ -63,9 +65,10 @@ export const LinkTreeView = () => {
             if (links.some(link => link.name === socialNetwork)) {
                 updatedItems = links.map(link => {
                     if (link.name === socialNetwork) {
-                        return { ...link, id, enabled: true };
+                        return { ...link, enabled: true, id };
+                    } else {
+                        return link;
                     }
-                    return link;
                 });
             } else {
                 const newItem = {
@@ -80,10 +83,11 @@ export const LinkTreeView = () => {
             updatedItems = links.map(link => {
                 if (link.name === socialNetwork) {
                     return { ...link, id: 0, enabled: false };
-                } else if (link.id > indexToUpdate) {
+                } else if (link.id > indexToUpdate && (indexToUpdate !== 0 && link.id === 1)) {
                     return { ...link, id: link.id - 1 };
+                } else {
+                    return link;
                 }
-                return link;
             });
         }
 
@@ -105,7 +109,7 @@ export const LinkTreeView = () => {
             ))}
             <button
                 className="bg-cyan-400 p-2 text-lg w-full uppercase text-slate-600 cursor-pointer  rouded font-bold"
-                onClick={() => mutate(user)}
+                onClick={() => mutate(queryClient.getQueryData(['user'])!)}
             >Guardar cambios</button>
         </div>
     )
