@@ -52,14 +52,17 @@ export const DevTree = ({ data }: DevTreeProps) => {
                 <main className="mx-auto max-w-5xl p-10 md:p-0">
                     <NavigationTabs />
 
-                    <div className="flex justify-end">
+                    <div className="flex justify-center sm:justify-end">
                         <Link
-                            className="font-bold text-right text-slate-800 text-2xl"
+                            className="font-bold text-center sm:text-right text-slate-800 text-2xl"
                             to={`/${data.handle}`}
                             target="_blank"
                             rel="noreferrer noopener"
-                        >Visitar Mi Perfil: /{data.handle}</Link>
+                        >
+                            Visitar Mi Perfil: /{data.handle}
+                        </Link>
                     </div>
+
 
                     <div className="flex flex-col md:flex-row gap-10 mt-10">
                         <div className="flex-1 ">

@@ -28,16 +28,17 @@ export default function NavigationTabs() {
                 <select
                     id="tabs"
                     name="tabs"
-                    className="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    value={location.pathname}   // 🔑 mantiene seleccionado el tab actual
                     onChange={handleChange}
+                    className="block w-full rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-10 text-base text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
                 >
                     {tabs.map((tab) => (
-                        <option
-                            value={tab.href}
-                            key={tab.name}
-                        >{tab.name}</option>
+                        <option value={tab.href} key={tab.name}>
+                            {tab.name}
+                        </option>
                     ))}
                 </select>
+
             </div>
 
             <div className="hidden sm:block">

@@ -4,8 +4,11 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 import type { ProfileForm, User } from "../types";
 import { updateProfile, uploadImage } from "../api/DevTreeAPI";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export const ProfileView = () => {
+
+    const [loading, setLoading] = useState(false);
 
     const queryClient = useQueryClient();
     const data: User = queryClient.getQueryData(['user'])!;
@@ -47,10 +50,12 @@ export const ProfileView = () => {
     };
 
     const handleUserProfileForm = (formData: ProfileForm) => {
+        setLoading(true);
         const user: User = queryClient.getQueryData<User>(['user'])!;
         user.description = formData.description;
         user.handle = formData.handle;
         updateProfileMutation.mutate(user);
+        setLoading(false);
     };
 
     return (
@@ -103,11 +108,35 @@ export const ProfileView = () => {
 
             </div>
 
-            <input
+            <button
                 type="submit"
-                className="bg-cyan-400 p-2 text-lg w-full uppercase text-slate-600 rounded-lg font-bold cursor-pointer"
-                value='Guardar Cambios'
-            />
+                disabled={loading}
+                className={`flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-600 transition-colors text-white text-lg w-full py-3 rounded-md font-semibold cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed`}
+            >
+                {loading && (
+                    <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                        ></circle>
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                        ></path>
+                    </svg>
+                )}
+                {loading ? "Guardando..." : "Guardar Cambios"}
+            </button>
         </form>
     )
 }

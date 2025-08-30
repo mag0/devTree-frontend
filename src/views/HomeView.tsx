@@ -21,7 +21,7 @@ export const HomeView = () => {
                         </h1>
 
                         <p className="text-slate-800 text-xl">
-                            Únete a más de 200 mil developers compartiendo sus redes sociales, comparte tu
+                            Únete a más de 200 mil personas compartiendo sus redes sociales, comparte tu
                             perfil de TikTok, Facebook, Instagram, Twitter, LinkedIn y más.
                         </p>
 

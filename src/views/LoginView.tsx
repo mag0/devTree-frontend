@@ -5,8 +5,12 @@ import type { LoginFormData } from "../types"
 import { toast } from "sonner"
 import { isAxiosError } from "axios"
 import api from "../config/axios"
+import { useState } from "react"
 
 export const LoginView = () => {
+
+    const [loading, setLoading] = useState(false)
+
     const navigate = useNavigate()
 
     const initialValues: LoginFormData = {
@@ -20,6 +24,7 @@ export const LoginView = () => {
 
     const handleLogin = async (formData: LoginFormData) => {
         try {
+            setLoading(true)
             const { data } = await api.post("/auth/login", formData)
             localStorage.setItem('token', data)
             navigate('/admin')
@@ -27,6 +32,8 @@ export const LoginView = () => {
             if (isAxiosError(error) && error.response) {
                 toast.error(error.response.data.error)
             }
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -72,11 +79,35 @@ export const LoginView = () => {
                     )}
                 </div>
 
-                <input
+                <button
                     type="submit"
-                    className="bg-cyan-400 p-3 text-lg w-full uppercase text-slate-600 rounded-lg font-bold cursor-pointer"
-                    value='Iniciar Sesión'
-                />
+                    disabled={loading}
+                    className={`flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-600 transition-colors text-white text-lg w-full py-3 rounded-md font-semibold cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed`}
+                >
+                    {loading && (
+                        <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                            ></circle>
+                            <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                            ></path>
+                        </svg>
+                    )}
+                    {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+                </button>
             </form>
 
             <nav className='mt-10'>

@@ -5,8 +5,11 @@ import { ErrorMessage } from '../components/ErrorMessage'
 import type { RegisterFormData } from '../types'
 import { toast } from 'sonner'
 import api from '../config/axios'
+import { useState } from 'react'
 
 export const RegisterView = () => {
+
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const location = useLocation()
     const navigate = useNavigate()
@@ -24,6 +27,7 @@ export const RegisterView = () => {
 
     const handleRegister = async (formData: RegisterFormData) => {
         try {
+            setIsSubmitting(true)
             const { data } = await api.post('/auth/register', formData)
             toast.success(data)
             reset();
@@ -32,6 +36,8 @@ export const RegisterView = () => {
             if (isAxiosError(error) && error.response) {
                 toast.error(error.response.data.error)
             }
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
@@ -125,11 +131,35 @@ export const RegisterView = () => {
                 </div>
 
                 {/* Botón */}
-                <input
+                <button
                     type="submit"
-                    value="Crear Cuenta"
-                    className="bg-cyan-500 hover:bg-cyan-600 transition-colors text-white text-lg w-full py-3 rounded-md font-semibold cursor-pointer"
-                />
+                    disabled={isSubmitting}
+                    className={`flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-600 transition-colors text-white text-lg w-full py-3 rounded-md font-semibold cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed`}
+                >
+                    {isSubmitting && (
+                        <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                            ></circle>
+                            <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                            ></path>
+                        </svg>
+                    )}
+                    {isSubmitting ? "Creando..." : "Crear Cuenta"}
+                </button>
             </form>
 
             <nav className='mt-10'>
