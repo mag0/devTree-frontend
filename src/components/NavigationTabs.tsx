@@ -28,7 +28,7 @@ export default function NavigationTabs() {
                 <select
                     id="tabs"
                     name="tabs"
-                    value={location.pathname}   // 🔑 mantiene seleccionado el tab actual
+                    value={location.pathname}
                     onChange={handleChange}
                     className="block w-full rounded-lg border border-gray-300 bg-white py-2 pl-3 pr-10 text-base text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:text-sm"
                 >
